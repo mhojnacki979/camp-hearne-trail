@@ -151,9 +151,9 @@
     {maxZoom:20,maxNativeZoom:19,attribution:'© OpenStreetMap contributors'});
   L.control.layers({'Satellite':sat,'Street map':streets},null,{position:'topright'}).addTo(map);
 
-  // actual trail line, lifted from the Google Earth image and georeferenced
-  var TRAIL_BOUNDS=[[30.880413,-96.623526],[30.888323,-96.60917]];
-  L.imageOverlay('assets/trail-overlay.png', TRAIL_BOUNDS, {opacity:0.95, interactive:false}).addTo(map);
+  // winding trail traced from the Google Earth route
+  L.polyline(TRAIL,{color:'#0E2536',weight:7,opacity:.55,lineJoin:'round'}).addTo(map);   // dark casing
+  L.polyline(TRAIL,{color:'#F2C14E',weight:4,opacity:.95,lineJoin:'round'}).addTo(map);   // gold line
 
   function cls(id){ return id===START_ID?' start':(id===FINISH_ID?' finish':''); }
 
