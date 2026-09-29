@@ -73,6 +73,30 @@
   .d-more{display:inline-block;margin:18px 0 0;font-weight:600;font-size:.82rem;letter-spacing:.04em;text-decoration:none;
     color:var(--brass);border-bottom:1px solid var(--brass);padding-bottom:2px;}
 
+
+  /* ---------- safety ---------- */
+  .safety-row{display:flex;gap:11px;align-items:center;padding:11px 12px;margin:2px 0 12px;border-radius:4px;
+    cursor:pointer;background:rgba(193,80,60,.13);border:1px solid rgba(193,80,60,.55);transition:.12s;}
+  .safety-row:hover,.safety-row:focus{background:rgba(193,80,60,.22);outline:none;}
+  .safety-row .ic{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid var(--survey);
+    color:var(--survey);display:grid;place-items:center;font-weight:700;font-size:.95rem;}
+  .safety-row .nm{display:block;font-size:.95rem;font-weight:600;color:#f3cfc8;}
+  .safety-row .sc{display:block;font-size:.74rem;color:var(--ink-dim);margin-top:1px;}
+  .d-inner h3.sf{font-family:var(--sans);font-size:.95rem;font-weight:700;color:#f3cfc8;margin:18px 0 2px;}
+  .sf-rule{background:rgba(193,80,60,.14);border:1px solid rgba(193,80,60,.5);border-radius:4px;
+    padding:12px 14px;margin:14px 0 4px;font-weight:600;color:#f3cfc8;}
+  .sf-list{margin:6px 0 0;padding-left:18px;color:#dce7ea;font-size:.95rem;line-height:1.6;}
+  .notice-wrap{position:fixed;inset:0;z-index:3000;background:rgba(6,14,20,.74);display:grid;place-items:center;padding:20px;}
+  .notice{max-width:440px;width:100%;background:var(--navy);border:1px solid var(--line);border-radius:5px;
+    padding:24px;box-shadow:0 24px 60px rgba(0,0,0,.6);}
+  .notice h3{font-family:var(--serif);font-weight:400;font-size:1.4rem;margin:0;}
+  .notice p{color:#cfe0e6;font-size:.92rem;line-height:1.55;margin:10px 0 0;}
+  .notice ul{margin:10px 0 0;padding-left:18px;color:#cfe0e6;font-size:.9rem;line-height:1.6;}
+  .notice .btns{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;}
+  .notice .btns button{flex:1;min-width:130px;padding:11px 14px;border-radius:3px;font-weight:600;
+    font-size:.8rem;cursor:pointer;border:1.5px solid var(--line);background:var(--navy-2);color:var(--ink);}
+  .notice .btns .go{background:var(--brass);color:var(--navy);border-color:var(--brass);}
+
   /* ---------- map ---------- */
   #map{height:100vh;height:100dvh;background:var(--panel);z-index:1;}
   .marker-pin{width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);
@@ -134,7 +158,8 @@
   <div id="map"></div>
 </div>
 
-<script src="stops-data.js?v=7"></script>
+<script src="safety-data.js?v=1"></script>
+<script src="stops-data.js?v=8"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
   integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
@@ -218,6 +243,46 @@
   function closeDetail(){ detail.classList.remove('open'); detail.setAttribute('aria-hidden','true'); }
   document.getElementById('backBtn').addEventListener('click',closeDetail);
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeDetail(); });
+
+
+  // ---- safety ----
+  var SF=window.SAFETY;
+  function openSafety(){
+    dBadge.textContent='!'; dBadge.style.borderColor='var(--survey)'; dBadge.style.color='var(--survey)';
+    var h='<div class="d-inner"><h2>'+esc(SF.title)+'</h2>'+
+          '<div class="d-sector">Safety &amp; trail rules</div>'+
+          '<p>'+esc(SF.lede)+'</p>'+
+          '<div class="sf-rule">'+esc(SF.rule)+'</div>';
+    SF.items.forEach(function(i){ h+='<h3 class="sf">'+esc(i.t)+'</h3><p>'+esc(i.b)+'</p>'; });
+    h+='<h4>Please do</h4><ul class="sf-list">'+SF.dos.map(function(d){return '<li>'+esc(d)+'</li>';}).join('')+'</ul>';
+    h+='<h4>Please don\'t</h4><ul class="sf-list">'+SF.donts.map(function(d){return '<li>'+esc(d)+'</li>';}).join('')+'</ul>';
+    h+='</div>';
+    dBody.innerHTML=h; dBody.scrollTop=0;
+    detail.classList.add('open'); detail.setAttribute('aria-hidden','false');
+  }
+  (function(){
+    var r=document.createElement('div'); r.className='safety-row'; r.tabIndex=0;
+    r.innerHTML='<span class="ic">!</span><span><span class="nm">Before you go — safety &amp; trail rules</span>'+
+                '<span class="sc">Stay on the trails · take water</span></span>';
+    r.addEventListener('click',openSafety);
+    r.addEventListener('keydown',function(e){ if(e.key==='Enter'){openSafety();} });
+    list.insertBefore(r, list.firstChild);
+  })();
+  // first-visit notice
+  (function(){
+    try{ if(localStorage.getItem('ch_safety_ack')==='1') return; }catch(e){}
+    var w=document.createElement('div'); w.className='notice-wrap';
+    w.innerHTML='<div class="notice" role="dialog" aria-modal="true"><h3>'+esc(SF.title)+'</h3>'+
+      '<p>'+esc(SF.lede)+'</p><ul><li>Stay on the marked trails — off-trail is poison ivy, ticks and snakes.</li>'+
+      '<li>Take water. Summer here is hot and humid.</li>'+
+      '<li>Trails can stay muddy for days after rain.</li></ul>'+
+      '<div class="btns"><button type="button" id="nOk">Got it</button>'+
+      '<button type="button" class="go" id="nMore">Read full safety info</button></div></div>';
+    document.body.appendChild(w);
+    function close(){ try{localStorage.setItem('ch_safety_ack','1');}catch(e){} w.remove(); }
+    w.querySelector('#nOk').addEventListener('click',close);
+    w.querySelector('#nMore').addEventListener('click',function(){ close(); openSafety(); });
+  })();
 
   // ---- locate me ----
   var meMarker=null, meCircle=null;
