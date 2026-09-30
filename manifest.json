@@ -1,0 +1,16 @@
+{
+  "name": "Camp Hearne Historic Trails",
+  "short_name": "Camp Hearne",
+  "description": "Self-guided walking trail of the Camp Hearne WWII Historic Site - 22 stops across the original camp footprint.",
+  "start_url": "./?src=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0E2536",
+  "theme_color": "#0E2536",
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "assets/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
