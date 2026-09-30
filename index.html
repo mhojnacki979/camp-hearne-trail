@@ -102,6 +102,12 @@
   .notice .btns button{flex:1;min-width:130px;padding:11px 14px;border-radius:3px;font-weight:600;
     font-size:.8rem;cursor:pointer;border:1.5px solid var(--line);background:var(--navy-2);color:var(--ink);}
   .notice .btns .go{background:var(--brass);color:var(--navy);border-color:var(--brass);}
+  .ack{margin:22px 0 0;padding:14px 16px;border-top:1px solid var(--line);
+    background:rgba(139,183,197,.06);border-radius:4px;}
+  .ack h4{margin:0 0 6px;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--brass-hi);}
+  .ack p{font-size:.86rem;line-height:1.6;color:var(--ink-dim);margin:6px 0 0;}
+  .ack em{color:#cfe0e6;font-style:italic;}
+
 
   /* ---------- map ---------- */
   #map{height:100vh;height:100dvh;background:var(--panel);z-index:1;}
@@ -164,8 +170,8 @@
   <div id="map"></div>
 </div>
 
-<script src="safety-data.js?v=1"></script>
-<script src="stops-data.js?v=9"></script>
+<script src="safety-data.js?v=2"></script>
+<script src="stops-data.js?v=10"></script>
 <script src="assets/vendor/leaflet/leaflet.js"></script>
 <script>
 (function(){
@@ -239,6 +245,7 @@
     html+='<div class="d-inner"><h2>'+esc(s.name)+'</h2><div class="d-sector">'+esc(s.sector)+'</div>';
     html+=renderNarr(s.narrative||[]);
     html+='<a class="d-more" href="'+esc(s.link)+'" target="_blank" rel="noopener">Read more at camphearne.com &rarr;</a>';
+    if(s.id==='V') html+=ackHTML();
     html+='</div>';
     dBody.innerHTML=html; dBody.scrollTop=0;
     detail.classList.add('open'); detail.setAttribute('aria-hidden','false');
@@ -288,6 +295,13 @@
     w.querySelector('#nOk').addEventListener('click',close);
     w.querySelector('#nMore').addEventListener('click',function(){ close(); openSafety(); });
   })();
+  // ---- credits / acknowledgement ----
+  var CR=window.CREDITS;
+  function ackHTML(){
+    return '<div class="ack"><h4>'+CR.title+'</h4>'+
+           CR.body.map(function(b){return '<p>'+b+'</p>';}).join('')+'</div>';
+  }
+
 
   // ---- locate me (live tracking while you walk) ----
   var meMarker=null, meCircle=null, watchId=null;

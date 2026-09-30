@@ -24,3 +24,12 @@ window.SAFETY = {
     "Don't walk the trails after dark."
   ]
 };
+
+window.CREDITS = {
+  title: "Historical &amp; Archaeological Source",
+  body: [
+    'Much of the historical and archaeological information presented along the Camp Hearne Trails is based on the research of Dr. Michael R. Waters in <em>Lone Star Stalag: German Prisoners of War at Camp Hearne</em> (Texas A&amp;M University Press, 2004).',
+    'Trail narratives have been adapted and interpreted by ROLL CALL &ndash; Friends of Camp Hearne for public education and site interpretation.'
+  ]
+};
+
