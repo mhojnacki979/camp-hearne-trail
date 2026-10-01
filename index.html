@@ -171,7 +171,7 @@
 </div>
 
 <script src="safety-data.js?v=2"></script>
-<script src="stops-data.js?v=10"></script>
+<script src="stops-data.js?v=11"></script>
 <script src="assets/vendor/leaflet/leaflet.js"></script>
 <script>
 (function(){
@@ -185,9 +185,21 @@
     {maxZoom:20,maxNativeZoom:19,attribution:'Imagery © Esri, Maxar, Earthstar Geographics'}).addTo(map);
   var streets = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     {maxZoom:20,maxNativeZoom:19,attribution:'© OpenStreetMap contributors'});
-  L.control.layers({'Satellite':sat,'Street map':streets},null,{position:'topright'}).addTo(map);
+  // secondary trail network, surveyed. Own pane below overlayPane so that toggling
+  // it on can never draw it over the primary trail or the stop markers.
+  map.createPane('network');
+  map.getPane('network').style.zIndex = 390;
+  var networkLayer = L.layerGroup();
+  (window.TRAIL_NETWORK || []).forEach(function(seg){
+    L.polyline(seg.pts,{pane:'network',color:'#0E2536',weight:5,opacity:.35,lineJoin:'round'}).addTo(networkLayer);
+    L.polyline(seg.pts,{pane:'network',color:'#9FB3C8',weight:2.5,opacity:.9,dashArray:'6,5',lineJoin:'round'})
+      .bindTooltip(seg.name,{sticky:true,direction:'top'}).addTo(networkLayer);
+  });
 
-  // winding trail traced from the Google Earth route
+  L.control.layers({'Satellite':sat,'Street map':streets},
+    {'All trails':networkLayer},{position:'topright'}).addTo(map);
+
+  // primary trail, from Cathy's survey
   L.polyline(TRAIL,{color:'#0E2536',weight:7,opacity:.55,lineJoin:'round'}).addTo(map);   // dark casing
   L.polyline(TRAIL,{color:'#F2C14E',weight:4,opacity:.95,lineJoin:'round'}).addTo(map);   // gold line
 

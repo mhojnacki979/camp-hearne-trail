@@ -1,6 +1,6 @@
 // Camp Hearne Trails - offline support.
 // Docs/data are network-first so updates always land; media/tiles are cache-first.
-const SHELL = 'ch-shell-v2';
+const SHELL = 'ch-shell-v3';
 const TILES = 'ch-tiles-v1';
 const TILE_CAP = 600;
 const TILE_HOSTS = ['server.arcgisonline.com', 'tile.openstreetmap.org'];
