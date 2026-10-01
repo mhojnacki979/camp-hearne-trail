@@ -1,6 +1,6 @@
 // Camp Hearne Trails - offline support.
 // Docs/data are network-first so updates always land; media/tiles are cache-first.
-const SHELL = 'ch-shell-v3';
+const SHELL = 'ch-shell-v4';
 const TILES = 'ch-tiles-v1';
 const TILE_CAP = 600;
 const TILE_HOSTS = ['server.arcgisonline.com', 'tile.openstreetmap.org'];
@@ -71,6 +71,9 @@ async function tileFirst(req) {
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
+  // Media Range requests must not be served or cached by the SW: a cached 206 would
+  // later be replayed as if it were the whole file and break <audio> playback.
+  if (req.headers.get('range')) return;
   let u;
   try { u = new URL(req.url); } catch (err) { return; }
 

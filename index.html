@@ -71,6 +71,10 @@
   .d-body{overflow-y:auto;padding:0 0 calc(40px + env(safe-area-inset-bottom));min-height:0;-webkit-overflow-scrolling:touch;}
   .d-photo{display:block;width:100%;height:auto;max-height:76vh;object-fit:contain;background:#0d1f2d;border-bottom:1px solid var(--line);}
   .d-photo-cap{font-size:.7rem;color:var(--ink-dim);padding:6px 20px 0;font-style:italic;}
+  .d-audio{margin:16px 0 2px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;
+    background:rgba(242,193,78,.06);}
+  .d-audio-h{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);margin-bottom:8px;}
+  .d-audio audio{width:100%;display:block;height:36px;}
   .d-inner{padding:18px 22px 0;}
   .d-inner h2{font-family:var(--serif);font-weight:400;font-size:1.55rem;line-height:1.15;margin:0;}
   .d-sector{color:var(--brass);font-size:.78rem;letter-spacing:.06em;margin-top:6px;text-transform:uppercase;}
@@ -171,7 +175,7 @@
 </div>
 
 <script src="safety-data.js?v=2"></script>
-<script src="stops-data.js?v=11"></script>
+<script src="stops-data.js?v=12"></script>
 <script src="assets/vendor/leaflet/leaflet.js"></script>
 <script>
 (function(){
@@ -255,6 +259,8 @@
     var html='';
     if(s.photo) html+='<img class="d-photo" src="'+s.photo+'" alt="'+esc(s.name)+'" loading="lazy"><div class="d-photo-cap">Historic photograph · Camp Hearne collection</div>';
     html+='<div class="d-inner"><h2>'+esc(s.name)+'</h2><div class="d-sector">'+esc(s.sector)+'</div>';
+    if(s.audio) html+='<div class="d-audio"><div class="d-audio-h">Listen to this stop</div>'+
+      '<audio controls preload="none" src="'+esc(s.audio)+'"></audio></div>';
     html+=renderNarr(s.narrative||[]);
     html+='<a class="d-more" href="'+esc(s.link)+'" target="_blank" rel="noopener">Read more at camphearne.com &rarr;</a>';
     if(s.id==='V') html+=ackHTML();
