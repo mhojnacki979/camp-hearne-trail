@@ -175,7 +175,7 @@
 </div>
 
 <script src="safety-data.js?v=2"></script>
-<script src="stops-data.js?v=12"></script>
+<script src="stops-data.js?v=13"></script>
 <script src="assets/vendor/leaflet/leaflet.js"></script>
 <script>
 (function(){
@@ -260,7 +260,7 @@
     if(s.photo) html+='<img class="d-photo" src="'+s.photo+'" alt="'+esc(s.name)+'" loading="lazy"><div class="d-photo-cap">Historic photograph · Camp Hearne collection</div>';
     html+='<div class="d-inner"><h2>'+esc(s.name)+'</h2><div class="d-sector">'+esc(s.sector)+'</div>';
     if(s.audio) html+='<div class="d-audio"><div class="d-audio-h">Listen to this stop</div>'+
-      '<audio controls preload="none" src="'+esc(s.audio)+'"></audio></div>';
+      '<audio controls preload="metadata" src="'+esc(s.audio)+'"></audio></div>';
     html+=renderNarr(s.narrative||[]);
     html+='<a class="d-more" href="'+esc(s.link)+'" target="_blank" rel="noopener">Read more at camphearne.com &rarr;</a>';
     if(s.id==='V') html+=ackHTML();
